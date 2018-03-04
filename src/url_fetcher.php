@@ -174,7 +174,7 @@ class UrlFetcher {
 		$options = array_merge(array(
 			"additional_headers" => array(),
 			"max_redirections" => $this->_MaxRedirections,
-			"user_agent" => "UrlFetcher ".self::VERSION
+			"user_agent" => "UrlFetcher/".self::VERSION
 		),$options);
 
 		if(strlen($url)>0){
