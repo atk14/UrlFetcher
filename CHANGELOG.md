@@ -3,6 +3,15 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.2] - 2018-03-31
+------------------
+
+### Added
+- Added method UrlFetcher::getStatusMessage()
+
+### Changed
+- Method UrlFetcher::getFilename() tries to extract a filename from the Content-Disposition header
+
 [1.1.1] - 2018-03-04
 --------------------
 
