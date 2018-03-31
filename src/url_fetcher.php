@@ -541,11 +541,29 @@ class UrlFetcher {
 	/**
 	 * Returns status code of response
 	 *
+	 * ```
+	 * echo $uf->getStatusCode(); // 200
+	 * ```
+	 *
 	 * @return int
 	 */
 	function getStatusCode(){
 		if(preg_match("/^HTTP\\/.\\.. ([0-9]{3})/",$this->getResponseHeaders(),$matches)){
 			return (int)$matches[1];
+		}
+	}
+
+	/**
+	 *
+	 * ```
+	 * echo $uf->getStatusMessage(); // "Found"
+	 * ```
+	 *
+	 * @return string
+	 */
+	function getStatusMessage(){
+		if(preg_match("/^HTTP\\/.\\.. [0-9]{3} ([A-Za-z ]{1,})/",$this->getResponseHeaders(),$matches)){
+			return $matches[1];
 		}
 	}
 
