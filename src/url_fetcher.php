@@ -541,8 +541,9 @@ class UrlFetcher {
 	/**
 	 * Returns status code of response
 	 *
+	 *
 	 * ```
-	 * echo $uf->getStatusCode(); // 200
+	 * echo $uf->getStatusCode(); // 200, 404, 403...
 	 * ```
 	 *
 	 * @return int
@@ -554,9 +555,11 @@ class UrlFetcher {
 	}
 
 	/**
+	 * Returns status message of response
+	 *
 	 *
 	 * ```
-	 * echo $uf->getStatusMessage(); // "Found"
+	 * echo $uf->getStatusMessage(); // "Found", "Not Found", "Forbidden"...
 	 * ```
 	 *
 	 * @return string
