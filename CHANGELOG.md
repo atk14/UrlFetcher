@@ -3,6 +3,12 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.3] - 2018-04-03
+------------------
+
+### Added
+- PUT and DELETE HTTP requests can be performed by UrlFetcher; added methods put() and delete()
+
 [1.2] - 2018-03-31
 ------------------
 
