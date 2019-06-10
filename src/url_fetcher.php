@@ -205,6 +205,8 @@ class UrlFetcher {
 	 */
 	function getUrl(){ return $this->_Url; }
 
+	function getUri(){ return $this->_Uri; }
+
 	/**
 	 * Returns method of the most recent request
 	 *
@@ -657,7 +659,7 @@ class UrlFetcher {
 		$_port = null;
 		$_username = "";
 		$_password = "";
-		$this->_Uri = $matches[3];
+		$this->_Uri = $this->_cleanUpUri($matches[3]);
 		unset($matches);
 
 		//rozpoznani cisla TCP portu, defaultne je to 80 resp. 443 na ssl
@@ -677,6 +679,24 @@ class UrlFetcher {
 		$this->_Server = $_server;
 		
 		return true;
+	}
+
+	protected function _cleanUpUri($uri){
+		if(preg_match('/^(.*?)(\?.*|)$/',$uri,$matches)){
+			$file = $matches[1];
+			$query_string = $matches[2];
+			$file = preg_replace('/(\/.){1,}\//','/',$file); // "/././file.dat" -> "/file.dat"
+			$file = preg_replace('/^(\/+\.\.){1,}\//','/',$file); // "/../about/" -> "/about/"
+			while(1){
+				$_file = preg_replace('/\/([^\/]+\/+\.\.)\//','/',$file); // "/about/../" -> "/"
+				if($_file==$file){ break; }
+				$file = $_file;
+			}
+			$file = preg_replace('/\/[^\/]+\/+\.\.$/','/',$file); // "/about/.." => "/"
+			$file = preg_replace('/^(\/+)\.\.$/','\1',$file); // "/.." => "/"
+			$uri = "$file$query_string";
+		}
+		return $uri;
 	}
 
 	/**
