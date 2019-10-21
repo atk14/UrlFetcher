@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.4] - 2019-10-21
+------------------
+
+- Added cleaning procedure that corrects some URL issues (for example, it converts "http://www.atk14.net/about/../" to "http://www.atk14.net/")
+
 [1.3] - 2018-04-03
 ------------------
 
