@@ -1,2 +1,4 @@
 <?php
-require("../src/url_fetcher.php");
+define("TEMP",__DIR__ . "/tmp/");
+
+require("../vendor/autoload.php");

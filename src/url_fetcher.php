@@ -300,6 +300,7 @@ class UrlFetcher {
 
 		$options += array(
 			"request_method" => null, // "GET", "POST", "PUT", "DELETE"
+			"write_to_file" => null,
 		);
 
 		if($options["request_method"]){
@@ -336,6 +337,11 @@ class UrlFetcher {
 			return $this->_setError("cannot write to socket");
 		}
 
+		$outfile_descr = null;
+		if($options["write_to_file"]){
+			$outfile_descr = fopen($options["write_to_file"],"w");
+		}
+
 		$headers = "";
 		$_buffer_ar = array();
 		while(!feof($f) && $f){
@@ -352,8 +358,20 @@ class UrlFetcher {
 				$_buffer_ar = array();
 				(strlen($_b)>0) && ($_buffer_ar[] = $_b);
 			}
+
+			if($options["write_to_file"] && $headers){
+				$_buffer = join("",$_buffer_ar);
+				$_buffer_ar = array();
+				if(strlen($_buffer)){
+					fwrite($outfile_descr,$_buffer,strlen($_buffer));
+				}
+			}
 		}
 		fclose($f);
+
+		if($options["write_to_file"]){
+			fclose($outfile_descr);
+		}
 
 		if(!strlen($headers)){
 			return $this->_setError("failed to read from socket");
@@ -364,7 +382,9 @@ class UrlFetcher {
 		}
 
 		$this->_ResponseHeaders = $headers;
-		$this->_Content = join("",$_buffer_ar);
+		if(!$options["write_to_file"]){
+			$this->_Content = join("",$_buffer_ar);
+		}
 
 		$this->_Fetched = true;
 
@@ -435,7 +455,7 @@ class UrlFetcher {
 		$this->_AdditionalHeaders = $options["additional_headers"];
 		$this->_AdditionalHeaders[] = "Content-Type: $options[content_type]";
 
-		return $this->fetchContent();
+		return $this->fetchContent($options);
 	}
 
 	/**
@@ -514,7 +534,7 @@ class UrlFetcher {
 	 *
 	 * @return string
 	 */
-	function getContent(){ $this->fetchContent(); return $this->_Content; }
+	function getContent($options = array()){ $this->fetchContent($options); return $this->_Content; }
 
 	/**
 	 * Returns value of given header
