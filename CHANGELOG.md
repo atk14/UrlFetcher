@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.4.1] - 2019-10-25
+--------------------
+
+- Method UrlFetcher::_cleanUpUri() fixed
+
 [1.4] - 2019-10-21
 ------------------
 
