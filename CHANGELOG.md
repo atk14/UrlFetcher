@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.4.2] - 2020-02-12
+--------------------
+
+- Added jump from the fwrite cycle after reaching a number of errors
+
 [1.4.1] - 2019-10-25
 --------------------
 
