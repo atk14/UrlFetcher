@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.4.3] - 2020-12-08
+--------------------
+
+- Handled better writing to the socket
+
 [1.4.2] - 2020-02-12
 --------------------
 
