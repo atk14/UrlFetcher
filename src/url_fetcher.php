@@ -333,7 +333,7 @@ class UrlFetcher {
 		}
 		$stat = $this->_fwriteStream($f,$_buffer);
 
-		if(!$stat || $stat!=strlen($_buffer)){
+		if(!$stat || $stat!=$_buffer->getLength()){
 			fclose($f);
 			return $this->_setError(sprintf("cannot write to socket (bytes written: %s, bytes needed to be written: %s)",$stat,$_buffer->getLength()));
 		}
