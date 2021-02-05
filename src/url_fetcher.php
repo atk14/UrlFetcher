@@ -629,8 +629,11 @@ class UrlFetcher {
 	 */
 	function getFilename(){
 		if($content_disposition = $this->getHeaderValue("Content-Disposition")){
-			if(preg_match('/filename="(.*?)"/',$content_disposition,$matches)){
-				return $matches[1];
+			if(preg_match('/filename="?([^";]+)"?/',$content_disposition,$matches)){
+				$filename = trim($matches[1]);
+				if(strlen($filename)>0){
+					return $filename;
+				}
 			}
 		}
 		if(preg_match("/([^\\/?]+)(\\?.*|)$/",$this->_Uri,$matches)){
