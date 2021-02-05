@@ -193,4 +193,61 @@ class tc_url_fetcher extends tc_base{
 		$this->assertEquals("",$f->getContent());
 		$this->assertEquals("POST",$f->getRequestMethod());
 	}
+
+	function test_upload_file(){
+		foreach(array(
+			// small file (~ 12kB)
+			array(
+				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=2&ext=jpg",
+				"filename" => "2.jpg",
+				"filesize" => 12382,
+				"md5sum" => "a748983e52095e4c7d9c8474fb34190a",
+				"mime_type" => "image/jpeg",
+			),
+			// big file (~ 2MB)
+			array(
+				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=SampleDocs-sales-sample-data&ext=docx",
+				"filename" => "SampleDocs-sales-sample-data.docx",
+				"filesize" => 2289073,
+				"md5sum" => "b05a97e064cc54b99daba53bde958d58",
+				"mime_type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			),
+			// huge file (~ 10MB)
+			array(
+				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=sampleDocs%20tree%20background%20image&ext=jpg",
+				"filename" => "sampleDocs tree background image.jpg",
+				"filesize" => 11368277,
+				"md5sum" => "11cce8cca8896a1608c405db1533e08f",
+				"mime_type" => "image/jpeg",
+			),
+		) as $item){
+			// Download
+			$f = new UrlFetcher($item["url"]);
+			$this->assertTrue($f->found());
+			$this->assertEquals($item["filename"],$f->getFilename());
+			$this->assertEquals($item["mime_type"],$f->getContentType());
+			$full_path = __DIR__ . "/tmp/" . $f->getFilename();
+			Files::WriteToFile($full_path,$f->getContent(),$err);
+			$this->assertFalse($err);
+			$this->assertEquals($item["filesize"],filesize($full_path));
+			$this->assertEquals($item["md5sum"],md5_file($full_path));
+
+			// Upload using StringBuffer
+			$f = new UrlFetcher("https://www.atk14.net/api/en/file_uploads/create_new/?format=json");
+			$content = new StringBuffer();
+			$content->addFile($full_path);
+			$f->post($content,array(
+				"content_type" => $item["mime_type"],
+				"additional_headers" => array(
+					sprintf('Content-Disposition: attachment; filename="%s"',rawurlencode($item["filename"]))
+				)
+			));
+			$this->assertEquals(201,$f->getStatusCode());
+			$data = json_decode($f->getContent(),true);
+			$this->assertEquals($item["filename"],$data["filename"]);
+			$this->assertEquals($item["filesize"],$data["filesize"]);
+			$this->assertEquals($item["md5sum"],$data["md5sum"]);
+			$this->assertEquals($item["mime_type"],$data["mime_type"]);
+		}
+	}
 }
