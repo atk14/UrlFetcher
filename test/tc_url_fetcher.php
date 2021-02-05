@@ -196,29 +196,29 @@ class tc_url_fetcher extends tc_base{
 
 	function test_upload_file(){
 		foreach(array(
-			// small file (~ 12kB)
+			// small file (~ 100kB)
 			array(
-				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=2&ext=jpg",
-				"filename" => "2.jpg",
-				"filesize" => 12382,
-				"md5sum" => "a748983e52095e4c7d9c8474fb34190a",
-				"mime_type" => "image/jpeg",
+				"url" => "https://filesamples.com/samples/document/pdf/sample2.pdf",
+				"filename" => "sample2.pdf",
+				"filesize" => 65715,
+				"md5sum" => "6099fc695fe018ce444752929d86f9c8",
+				"mime_type" => "application/pdf",
 			),
 			// big file (~ 2MB)
 			array(
-				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=SampleDocs-sales-sample-data&ext=docx",
-				"filename" => "SampleDocs-sales-sample-data.docx",
-				"filesize" => 2289073,
-				"md5sum" => "b05a97e064cc54b99daba53bde958d58",
-				"mime_type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"url" => "https://filesamples.com/samples/audio/mp3/sample1.mp3",
+				"filename" => "sample1.mp3",
+				"filesize" => 1954212,
+				"md5sum" => "c6c014f0c24af2d5e943c3b2ea40a329",
+				"mime_type" => "audio/mpeg",
 			),
 			// huge file (~ 10MB)
 			array(
-				"url" => "http://www.sampledocs.in/DownloadFiles/SampleFile?filename=sampleDocs%20tree%20background%20image&ext=jpg",
-				"filename" => "sampleDocs tree background image.jpg",
-				"filesize" => 11368277,
-				"md5sum" => "11cce8cca8896a1608c405db1533e08f",
-				"mime_type" => "image/jpeg",
+				"url" => "https://filesamples.com/samples/video/avi/sample_1920x1080.avi",
+				"filename" => "sample_1920x1080.avi",
+				"filesize" => 9909100,
+				"md5sum" => "49c64d5d240cf9ef41a517dbed58a5fd",
+				"mime_type" => "video/x-msvideo",
 			),
 		) as $item){
 			// Download
