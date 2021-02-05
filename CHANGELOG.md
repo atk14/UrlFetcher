@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.5.1] - 2021-02-05
+--------------------
+
+- Memory consumption fixed
+
 [1.5] - 2021-02-05
 ------------------
 
