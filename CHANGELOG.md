@@ -3,6 +3,12 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.5] - 2021-02-05
+------------------
+
+- Data is being written to the socket from StringBuffer and not from a string
+- Method UrlFetcher::getFilename() improved
+
 [1.4.3] - 2020-12-08
 --------------------
 
