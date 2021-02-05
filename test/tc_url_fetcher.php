@@ -242,7 +242,9 @@ class tc_url_fetcher extends tc_base{
 					sprintf('Content-Disposition: attachment; filename="%s"',rawurlencode($item["filename"]))
 				)
 			));
-			$this->assertEquals(201,$f->getStatusCode());
+			$status_code = $f->getStatusCode();
+			$this->assertEquals("",$f->getErrorMessage());
+			$this->assertEquals(201,$status_code);
 			$data = json_decode($f->getContent(),true);
 			$this->assertEquals($item["filename"],$data["filename"]);
 			$this->assertEquals($item["filesize"],$data["filesize"]);
