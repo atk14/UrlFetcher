@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.6] - 2021-02-06
+------------------
+
+- UrlFetcher::getContent() returns an instance of StringBufferTemporary
+
 [1.5.1] - 2021-02-05
 --------------------
 
