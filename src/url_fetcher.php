@@ -766,30 +766,32 @@ class UrlFetcher {
 	 * @ignore
 	 */
 	protected function _fwriteStream(&$fp, $buffer) {
+		$total_length = $buffer->getLength();
 		$fwrite = 0;
 		$retries = 0;
-		$chunk_size = 1024 * 1024; // 1MB
+		$chunk_size = 1024 * 256; // 256kB
 		$chunk = null;
-		for($written = 0; $written < $buffer->getLength(); $written += $fwrite){
+		for($bytes_written = 0; $bytes_written < $total_length; $bytes_written += $fwrite){
+			$length = min($chunk_size,$total_length - $bytes_written);
 			if(is_null($chunk)){
-				$chunk = $buffer->substr($written,$chunk_size);
+				$chunk = $buffer->substr($bytes_written,$length);
 			}
-			$fwrite = @fwrite($fp, $chunk);
+			$fwrite = @fwrite($fp, $chunk, $length);
 
 			if($fwrite === false){
-				return $written;
+				return $bytes_written;
 			}
 
-			if(!$fwrite){ // 0 bytes written; error code  11:  Resource temporarily unavailable
-				if($retries>=100){ return $written; }
+			if(!$fwrite){ // 0 bytes bytes_written; error code  11:  Resource temporarily unavailable
+				if($retries>=100){ return $bytes_written; }
 				usleep(10000 + $retries * 1000); // 0.01s + 0s .. 0.01s + 0.1s
 				$retries++;
 				continue;
 			}else{
-				$retries = 0; // something was written? -> reset $retries
+				$retries = 0; // something was bytes_written? -> reset $retries
 				$chunk = null;
 			}
 		}
-		return $written;
+		return $bytes_written;
 	}
 }
