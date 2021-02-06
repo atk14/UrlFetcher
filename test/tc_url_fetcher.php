@@ -205,13 +205,13 @@ class tc_url_fetcher extends tc_base{
 				"mime_type" => "application/pdf",
 			),
 			// big file (~ 2MB)
-			array(
-				"url" => "https://filesamples.com/samples/audio/mp3/sample1.mp3",
-				"filename" => "sample1.mp3",
-				"filesize" => 1954212,
-				"md5sum" => "c6c014f0c24af2d5e943c3b2ea40a329",
-				"mime_type" => "audio/mpeg",
-			),
+			//array(
+			//	"url" => "https://filesamples.com/samples/audio/mp3/sample1.mp3",
+			//	"filename" => "sample1.mp3",
+			//	"filesize" => 1954212,
+			//	"md5sum" => "c6c014f0c24af2d5e943c3b2ea40a329",
+			//	"mime_type" => "audio/mpeg",
+			//),
 			// huge file (~ 10MB)
 			array(
 				"url" => "https://filesamples.com/samples/video/avi/sample_1920x1080.avi",
