@@ -140,7 +140,7 @@ class UrlFetcher {
 		$this->_RequestHeaders = "";
 		$this->_ResponseHeaders = "";
 
-		$this->_Content = null;
+		$this->_Content = null; // StringBufferTemporary
 	}
 
 	/**
@@ -339,20 +339,20 @@ class UrlFetcher {
 		}
 
 		$headers = "";
-		$_buffer_ar = array();
+		$_buffer = new StringBufferTemporary();
 		while(!feof($f) && $f){
-			$_b = fread($f,4095);
+			$_b = fread($f,1024 * 256); // 256kB
 			if(strlen($_b)==0){
 				usleep(20000);
 				continue;
 			}
-			$_buffer_ar[] = $_b;
+			$_buffer->addString($_b);
 
-			if(!strlen($headers) && preg_match("/^(.*?)\\r?\\n\\r?\\n(.*)$/s",join("",$_buffer_ar),$matches)){
+			if(!strlen($headers) && preg_match("/^(.*?)\\r?\\n\\r?\\n(.*)$/s",$_buffer->toString(),$matches)){
 				$headers = $matches[1];
 				$_b = $matches[2];
-				$_buffer_ar = array();
-				(strlen($_b)>0) && ($_buffer_ar[] = $_b);
+				$_buffer = new StringBufferTemporary();
+				(strlen($_b)>0) && ($_buffer->addString($_b));
 			}
 		}
 		fclose($f);
@@ -366,7 +366,7 @@ class UrlFetcher {
 		}
 
 		$this->_ResponseHeaders = $headers;
-		$this->_Content = join("",$_buffer_ar);
+		$this->_Content = $_buffer;
 
 		$this->_Fetched = true;
 
@@ -577,7 +577,16 @@ class UrlFetcher {
 	 *
 	 * @return string
 	 */
-	function getContentLength(){ return $this->getHeaderValue("content-length"); }
+	function getContentLength(){
+		$length = $this->getHeaderValue("content-length");
+		if(strlen($length)){
+			return $length;
+		}
+		if($this->_Content){
+			return (string)$this->_Content->getLength();
+		}
+		return "";
+	}
 
 	/**
 	 * Returns status code of response
