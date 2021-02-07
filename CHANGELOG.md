@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.6.2] - 2021-02-07
+--------------------
+
+- Dependency fixed
+
 [1.6.1] - 2021-02-06
 --------------------
 
