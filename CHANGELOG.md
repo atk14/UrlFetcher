@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.7] - 2021-12-03
+------------------
+
+* 5033b5f - Added class UrlFetcherViaCommand for fetching data not from network socket but from a command (e.g. scripts/simulate_http_request in an ATK14 project)
+
 [1.6.3] - 2021-07-13
 --------------------
 
