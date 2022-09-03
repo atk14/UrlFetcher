@@ -3,6 +3,12 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.7.2] - 2022-09-03
+--------------------
+
+* 26a42ef - Method UrlFetcher::_cleanUpUri() fixed
+* 93f1e3c - Method UrlFetcher::getContentType() returns null if there is no Content-Type header in the response
+
 [1.7.1] - 2021-12-08
 --------------------
 
