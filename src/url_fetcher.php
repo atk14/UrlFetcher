@@ -53,7 +53,7 @@
  */
 class UrlFetcher {
 
-	const VERSION = "1.7.2";
+	const VERSION = "1.7.3";
 
 	/**
 	 * Authentication type

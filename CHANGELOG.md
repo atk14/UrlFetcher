@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.7.3] - 2022-10-03
+--------------------
+
+* 21a5a9b - Content is being transparently gzdecoded when gzip content encoding is in play
+
 [1.7.2] - 2022-09-03
 --------------------
 
