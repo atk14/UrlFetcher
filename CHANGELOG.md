@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.7.4] - 2022-12-13
+--------------------
+
+* afcafd4 - In case of communication via SSL, the peer is verified by default + added constant URL_FETCHER_VERIFY_PEER
+
 [1.7.3] - 2022-10-03
 --------------------
 

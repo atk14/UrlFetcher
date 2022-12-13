@@ -55,7 +55,7 @@ defined("URL_FETCHER_VERIFY_PEER") || define("URL_FETCHER_VERIFY_PEER",true);
  */
 class UrlFetcher {
 
-	const VERSION = "1.7.3";
+	const VERSION = "1.7.4";
 
 	/**
 	 * Authentication type
