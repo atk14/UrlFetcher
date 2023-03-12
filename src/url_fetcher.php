@@ -785,7 +785,12 @@ class UrlFetcher {
 			);
 			$context = stream_context_create($context_options);
 			$http_response_header = null;
-			$f = fopen("$this->_Url","r",false,$context);
+			$f = @fopen("$this->_Url","r",false,$context);
+			if(!$f){
+				$err_ar = error_get_last();
+				$errstr = "could not connect to proxy server $this->_Proxy";
+				return $this->_setError("failed to open socket: $errstr ($err_ar[message])");
+			}
 			if(!is_null($http_response_header)){
 				$response_headers = join("\n\r",$http_response_header);
 			}
