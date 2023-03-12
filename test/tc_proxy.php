@@ -21,7 +21,7 @@ class TcProxy extends TcBase {
 		// Privoxy config
 		$uf = new UrlFetcher("http://config.privoxy.org/",["proxy" => "tcp://127.0.0.1:8118"]);
 		$this->assertEquals(200,$uf->getStatusCode());
-		$this->assertContains("<title>Privoxy@localhost</title>",(string)$uf->getContent());
+		$this->assertTrue(!!preg_match("/<title>Privoxy@(ip6-|)localhost<\/title>/",(string)$uf->getContent()));
 
 		$uf = new UrlFetcher("http://config.privoxy.org/");
 		$this->assertEquals(200,$uf->getStatusCode());
