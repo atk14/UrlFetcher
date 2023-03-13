@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8] - 2023-03-13
+------------------
+
+* UrlFetcher can communicate through a proxy server
+
 [1.7.4] - 2022-12-13
 --------------------
 
