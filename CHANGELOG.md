@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.1] - 2023-05-15
+--------------------
+
+* 1077c84 - Fix - Host header corrected in a request to a http server on a non-standard port
+
 [1.8] - 2023-03-13
 ------------------
 
