@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.2] - 2023-07-31
+--------------------
+
+* 9235fa0 - Writing to stream improved
+
 [1.8.1] - 2023-05-15
 --------------------
 
