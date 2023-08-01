@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.3] - 2023-08-01
+--------------------
+
+* d0f5330 - Method UrlFetcher::setSocketTimeout() returns the previous timeout
+
 [1.8.2] - 2023-07-31
 --------------------
 
