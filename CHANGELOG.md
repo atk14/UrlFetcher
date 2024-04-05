@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.4] - 2024-04-05
+--------------------
+
+* 4be457a - A GET request can contain a request body
+
 [1.8.3] - 2023-08-01
 --------------------
 
