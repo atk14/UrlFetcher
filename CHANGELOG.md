@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.5] - 2024-05-15
+--------------------
+
+* 20aad14 - Fix
+
 [1.8.4] - 2024-04-05
 --------------------
 
