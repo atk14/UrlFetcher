@@ -154,6 +154,12 @@ class UrlFetcher {
 	 */
 	protected $_VerifyPeer;
 
+	/**
+	 *
+	 * @var boolean
+	 */
+	protected $_VerifyPeerName;
+
 	protected $_Proxy = "";
 
 	protected $_ForceContentLength = null;
@@ -210,6 +216,7 @@ class UrlFetcher {
 			"max_redirections" => $this->_MaxRedirections,
 			"user_agent" => "UrlFetcher/".self::VERSION,
 			"verify_peer" => URL_FETCHER_VERIFY_PEER,
+			"verify_peer_name" => true,
 			"proxy" => "", // e.g. "tcp://127.0.0.1:8118"
 		);
 
@@ -221,6 +228,7 @@ class UrlFetcher {
 		$this->_MaxRedirections = $options["max_redirections"];
 		$this->_UserAgent = $options["user_agent"];
 		$this->_VerifyPeer = $options["verify_peer"];
+		$this->_VerifyPeerName = $options["verify_peer_name"];
 		$this->_Proxy = $options["proxy"];
 	}
 	
@@ -789,7 +797,10 @@ class UrlFetcher {
 		$context_options = array();
 		if($this->_Ssl){
 			$_proto = "ssl";
-			$context_options["ssl"] = array("verify_peer" => $this->_VerifyPeer);
+			$context_options["ssl"] = array(
+				"verify_peer" => $this->_VerifyPeer,
+				"verify_peer_name" => $this->_VerifyPeerName,
+			);
 		}
 
 		$content_buffer = new StringBuffer();
