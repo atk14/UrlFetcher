@@ -280,4 +280,13 @@ class tc_url_fetcher extends tc_base{
 		$prev_timeout = $f->setSocketTimeout(8.0);
 		$this->assertEquals(10.0,$prev_timeout);
 	}
+
+	function test_verify_peer_name(){
+		$f = new UrlFetcher("https://alt.skelet.atk14.net/");
+		$this->assertFalse(@$f->found());
+		$this->assertStringContains("failed to open socket",$f->getErrorMessage());
+
+		$f = new UrlFetcher("https://alt.skelet.atk14.net/",array("verify_peer_name" => false));
+		$this->assertTrue($f->found());
+	}
 }
