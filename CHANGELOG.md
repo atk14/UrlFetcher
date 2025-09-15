@@ -3,6 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.6] - 2024-05-15
+--------------------
+
+* 4c12114 - Added option verify_peer_name (true by default)
+
 [1.8.5] - 2024-05-15
 --------------------
 
