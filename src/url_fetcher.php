@@ -57,6 +57,10 @@ class UrlFetcher {
 
 	const VERSION = "1.8.6";
 
+	const READ_POLL_INTERVAL_US = 20000;   // 20ms mezi pokusy o čtení
+	const WRITE_RETRY_INTERVAL_US = 10000; // 10ms mezi pokusy o zápis
+	const SOCKET_CHUNK_SIZE = 262144;      // 256kB
+
 	protected $_Fetched;
 
 	protected $_RequestMethod;
@@ -893,9 +897,9 @@ class UrlFetcher {
 		}
 
 		while(!feof($f) && $f){
-			$_b = fread($f,1024 * 256); // 256kB
+			$_b = fread($f,self::SOCKET_CHUNK_SIZE); // 256kB
 			if(strlen($_b)==0){
-				usleep(20000);
+				usleep(self::READ_POLL_INTERVAL_US);
 				continue;
 			}
 			$response_buffer->addString($_b);
@@ -932,7 +936,7 @@ class UrlFetcher {
 		$total_length = $buffer->getLength();
 		$fwrite = 0;
 		$retries = 0;
-		$chunk_size = 1024 * 256; // 256kB
+		$chunk_size = self::SOCKET_CHUNK_SIZE; // 256kB
 		$chunk = null;
 		for($bytes_written = 0; $bytes_written < $total_length; $bytes_written += $fwrite){
 			$length = min($chunk_size,$total_length - $bytes_written);
@@ -946,7 +950,7 @@ class UrlFetcher {
 				$fwrite = @fwrite($fp, $chunk, $length);
 				if($fwrite !== false){ break; }
 				$max_retries--;
-				usleep(10000); // 0.01s
+				usleep(self::WRITE_RETRY_INTERVAL_US); // 0.01s
 			}
 
 			if($fwrite === false){
@@ -955,7 +959,7 @@ class UrlFetcher {
 
 			if(!$fwrite){ // 0 bytes bytes_written; error code  11:  Resource temporarily unavailable
 				if($retries>=100){ return $bytes_written; }
-				usleep(10000 + $retries * 1000); // 0.01s + 0s .. 0.01s + 0.1s
+				usleep(self::WRITE_RETRY_INTERVAL_US + $retries * self::WRITE_RETRY_INTERVAL_US); // 0.01s + 0s .. 0.01s + 0.1s
 				$retries++;
 				continue;
 			}else{
