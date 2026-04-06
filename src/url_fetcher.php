@@ -543,7 +543,7 @@ class UrlFetcher {
 	 * @param array $options {@see getResponseHeaders()}
 	 * @return string|array
 	 */
-	function getHeaders(){ return $this->getResponseHeaders($options = array()); }
+	function getHeaders($options = array()){ return $this->getResponseHeaders($options); }
 
 	/**
 	 * Return content of called URL.
