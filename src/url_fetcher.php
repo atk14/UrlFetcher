@@ -112,6 +112,14 @@ class UrlFetcher {
 	protected $_SocketTimeout = 5.0;
 
 	/**
+	 * Read timeout
+	 *
+	 * @var float
+	 *
+	 */
+	protected $_ReadTimeout = 60.0;
+
+	/**
 	 * Redirections counter
 	 *
 	 * @var integer
@@ -218,6 +226,8 @@ class UrlFetcher {
 			"verify_peer" => URL_FETCHER_VERIFY_PEER,
 			"verify_peer_name" => true,
 			"proxy" => "", // e.g. "tcp://127.0.0.1:8118"
+			"socket_timeout" => $this->_SocketTimeout,
+			"read_timeout" => $this->_ReadTimeout,
 		);
 
 		if(strlen($url)>0){
@@ -230,6 +240,8 @@ class UrlFetcher {
 		$this->_VerifyPeer = $options["verify_peer"];
 		$this->_VerifyPeerName = $options["verify_peer_name"];
 		$this->_Proxy = $options["proxy"];
+		$this->_SocketTimeout = (float)$options["socket_timeout"];
+		$this->_ReadTimeout = (float)$options["read_timeout"];
 	}
 	
 	/**
@@ -310,8 +322,20 @@ class UrlFetcher {
 	 */
 	function setSocketTimeout($timeout){
 		$current_socket_timeout = $this->_SocketTimeout;
-		$this->_SocketTimeout = $timeout;
+		$this->_SocketTimeout = (float)$timeout;
 		return $current_socket_timeout;
+	}
+
+	/**
+	 * Set read timeout
+	 *
+	 * @param float $timeout timeout in seconds
+	 * @return float previous timeout
+	 */
+	function setReadTimeout($timeout){
+		$current_timeout = $this->_ReadTimeout;
+		$this->_ReadTimeout = (float)$timeout;
+		return $current_timeout;
 	}
 
 	/**
@@ -813,13 +837,18 @@ class UrlFetcher {
 
 			$context = stream_context_create($context_options);
 			$f = stream_socket_client("$_proto://$this->_Server:$this->_Port", $errno, $errstr, $this->_SocketTimeout, STREAM_CLIENT_CONNECT, $context);
-
 			if(!$f){
 				if(strpos($errstr,"getaddrinfo failed")){
 					$errstr = "could not resolve host: $this->_Server ($errstr)";
 				}
 				return $this->_setError("failed to open socket: $errstr [$errno]");
 			}
+
+			// Read timeout
+			$sec = floor($this->_ReadTimeout);
+			$usec = round(($this->_ReadTimeout - $sec) * 1000000);
+			stream_set_timeout($f,$sec,$usec);
+
 			stream_set_blocking($f,0);
 			$content_buffer->addString($this->_RequestHeaders);
 
