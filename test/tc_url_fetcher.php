@@ -289,4 +289,9 @@ class tc_url_fetcher extends tc_base{
 		$f = new UrlFetcher("https://alt.skelet.atk14.net/",array("verify_peer_name" => false));
 		$this->assertTrue($f->found());
 	}
+
+	function test_url_without_ending_slash(){
+		$f = new UrlFetcher("https://www.atk14.net");
+		$this->assertTrue($f->found());
+	}
 }

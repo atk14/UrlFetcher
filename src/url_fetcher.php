@@ -712,7 +712,7 @@ class UrlFetcher {
 	
 		$this->_reset();
 
-		if(!preg_match("/^http(s{0,1}):\\/\\/([^\\/]+)(\\/.*)$/",$url,$matches)){
+		if(!preg_match("/^http(s{0,1}):\\/\\/([^\\/]+)(\\/.*|)$/",$url,$matches)){
 			return $this->_setError("invalid url format");
 		}
 
@@ -745,6 +745,7 @@ class UrlFetcher {
 	}
 
 	protected function _cleanUpUri($uri){
+		if($uri===""){ $uri = "/"; }
 		if(preg_match('/^(.*?)(\?.*|)$/',$uri,$matches)){
 			$file = $matches[1];
 			$query_string = $matches[2];
