@@ -59,6 +59,7 @@ class UrlFetcher {
 
 	const READ_POLL_INTERVAL_US = 20000;   // 20ms mezi pokusy o čtení
 	const WRITE_RETRY_INTERVAL_US = 10000; // 10ms mezi pokusy o zápis
+	const WRITE_RETRY_SCALE_US = 1000;     // scaling factor for backoff
 	const SOCKET_CHUNK_SIZE = 262144;      // 256kB
 
 	protected $_Fetched;
@@ -852,8 +853,8 @@ class UrlFetcher {
 			$sec = floor($this->_ReadTimeout);
 			$usec = round(($this->_ReadTimeout - $sec) * 1000000);
 			stream_set_timeout($f,$sec,$usec);
+			// stream_set_blocking($f,0); // stream_set_timeout nefunguje v non-blocking módu
 
-			stream_set_blocking($f,0);
 			$content_buffer->addString($this->_RequestHeaders);
 
 			if($this->_BodyData->getLength()){
@@ -959,7 +960,7 @@ class UrlFetcher {
 
 			if(!$fwrite){ // 0 bytes bytes_written; error code  11:  Resource temporarily unavailable
 				if($retries>=100){ return $bytes_written; }
-				usleep(self::WRITE_RETRY_INTERVAL_US + $retries * self::WRITE_RETRY_INTERVAL_US); // 0.01s + 0s .. 0.01s + 0.1s
+				usleep(self::WRITE_RETRY_INTERVAL_US + $retries * self::WRITE_RETRY_SCALE_US); // 0.01s + 0s .. 0.01s + 0.1s
 				$retries++;
 				continue;
 			}else{
