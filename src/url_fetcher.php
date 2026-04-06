@@ -57,8 +57,8 @@ class UrlFetcher {
 
 	const VERSION = "1.8.6";
 
-	const READ_POLL_INTERVAL_US = 20000;   // 20ms mezi pokusy o čtení
-	const WRITE_RETRY_INTERVAL_US = 10000; // 10ms mezi pokusy o zápis
+	const READ_POLL_INTERVAL_US = 20000;   // 20ms between read attempts
+	const WRITE_RETRY_INTERVAL_US = 10000; // 10ms between write attempts
 	const WRITE_RETRY_SCALE_US = 1000;     // scaling factor for backoff
 	const SOCKET_CHUNK_SIZE = 262144;      // 256kB
 
@@ -427,11 +427,10 @@ class UrlFetcher {
 
 		$this->_Fetched = true;
 
-		// this is a nusty hack
+		// this is a nasty hack
 		// sometimes it occurs that the content is longer than Content-Length
 		//
-		// je to hack pro stahovani souboru: http://do-mobilu.respekt.cz/kestazeni-download.php?f_ID=815
-		// tam koumaci prilepili za data velikost souboru - pocitaji natvrdo z HTTP/1.1
+		// workaround for file downloads where some servers append extra data after the actual content
 		if(($length = $this->getContentLength()) && ($this->_Content->getLength() > (int)$length)){
 			$this->_Content = substr($this->_Content,0,$length);
 		}
@@ -754,7 +753,7 @@ class UrlFetcher {
 		$this->_Uri = $this->_cleanUpUri($matches[3]);
 		unset($matches);
 
-		//rozpoznani cisla TCP portu, defaultne je to 80 resp. 443 na ssl
+		// detect TCP port number, defaults to 80 or 443 for SSL
 		if(preg_match("/^(.+):([0-9]{1,})$/",$_server,$matches)){
 			$_server = $matches[1];
 			$this->_Port = (integer)$matches[2];
@@ -853,7 +852,7 @@ class UrlFetcher {
 			$sec = floor($this->_ReadTimeout);
 			$usec = round(($this->_ReadTimeout - $sec) * 1000000);
 			stream_set_timeout($f,$sec,$usec);
-			// stream_set_blocking($f,0); // stream_set_timeout nefunguje v non-blocking módu
+			// stream_set_blocking($f,0); // stream_set_timeout does not work in non-blocking mode
 
 			$content_buffer->addString($this->_RequestHeaders);
 
