@@ -122,7 +122,7 @@ class UrlFetcher {
 	 * @var float
 	 *
 	 */
-	protected $_ReadTimeout = 60.0;
+	protected $_ReadTimeout = 30.0;
 
 	/**
 	 * Redirections counter
@@ -851,8 +851,9 @@ class UrlFetcher {
 			// Read timeout
 			$sec = floor($this->_ReadTimeout);
 			$usec = round(($this->_ReadTimeout - $sec) * 1000000);
+			stream_set_blocking($f,true);
 			stream_set_timeout($f,$sec,$usec);
-			// stream_set_blocking($f,0); // stream_set_timeout does not work in non-blocking mode
+			// stream_set_blocking($f,false); // stream_set_timeout does not work in non-blocking mode
 
 			$content_buffer->addString($this->_RequestHeaders);
 
@@ -898,6 +899,13 @@ class UrlFetcher {
 
 		while(!feof($f) && $f){
 			$_b = fread($f,self::SOCKET_CHUNK_SIZE); // 256kB
+
+			$info = stream_get_meta_data($f);
+			if($info["timed_out"]){
+				$this->_setError("read timeout");
+				break;
+			}
+
 			if(strlen($_b)==0){
 				usleep(self::READ_POLL_INTERVAL_US);
 				continue;
@@ -912,6 +920,11 @@ class UrlFetcher {
 			}
 		}
 		fclose($f);
+
+		if($this->errorOccurred()){
+			return false;
+		}
+
 
 		if(!$response_buffer->getLength() && !strlen($response_headers)){ // content ($response_buffer) may be empty
 			return $this->_setError("failed to read from socket");
