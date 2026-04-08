@@ -432,7 +432,7 @@ class UrlFetcher {
 		//
 		// workaround for file downloads where some servers append extra data after the actual content
 		if(($length = $this->getContentLength()) && ($this->_Content->getLength() > (int)$length)){
-			$this->_Content = substr($this->_Content,0,$length);
+			$this->_Content = $this->_Content->substr(0,$length);
 		}
 
 		// !! redirection
@@ -677,7 +677,7 @@ class UrlFetcher {
 	 * @return string
 	 */
 	function getStatusMessage(){
-		if(preg_match("/^HTTP\\/.\\.. [0-9]{3} ([A-Za-z ]{1,})/",$this->getResponseHeaders(),$matches)){
+		if(preg_match("/^HTTP\\/.\\.. [0-9]{3} ([A-Za-z ]{1,})\\b/",$this->getResponseHeaders(),$matches)){
 			return $matches[1];
 		}
 	}
@@ -897,11 +897,17 @@ class UrlFetcher {
 			}
 		}
 
-		while($f && !feof($f)){
+		$start = microtime(true);
+		while(!feof($f)){
 			$_b = fread($f,self::SOCKET_CHUNK_SIZE); // 256kB
 
 			$info = stream_get_meta_data($f);
 			if($info["timed_out"]){
+				$this->_setError("read timeout");
+				break;
+			}
+
+			if(microtime(true)-$start > $this->_ReadTimeout){
 				$this->_setError("read timeout");
 				break;
 			}
