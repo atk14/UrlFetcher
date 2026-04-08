@@ -198,6 +198,13 @@ class tc_url_fetcher extends tc_base{
 		$this->assertEquals(302,$f->getStatusCode());
 		$this->assertEquals("",(string)$f->getContent());
 		$this->assertEquals("POST",$f->getRequestMethod());
+
+		// -- full address without closing slash
+		$f = new UrlFetcher("https://jarek.plovarna.cz/unit-testing/redirection.php?type=full_address_without_closing_slash");
+		$this->assertEquals(200,$f->getStatusCode());
+		$this->assertEquals("https://example.com",$f->getUrl());
+		$this->assertStringContains("Example Domain",(string)$f->getContent());
+
 	}
 
 	function test_upload_file(){

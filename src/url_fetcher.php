@@ -443,7 +443,7 @@ class UrlFetcher {
 			}
 			if(preg_match('/^\//',$location)){
 				// absolute redirection
-				$location = preg_replace('/^(https?:\/\/[^\/]+)\/.*/i',"\\1$location",$this->_Url);
+				$location = preg_replace('/^(https?:\/\/[^\/]+)(\/.*)?$/i',"\\1$location",$this->_Url); // the closing slash is not mandatory - e.g. "https://example.com"
 			}elseif(!preg_match('/^https?:\/\//',$location)){
 				// relative redirection
 				if(preg_match('/\?/',$this->_Url)){
