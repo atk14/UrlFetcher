@@ -3,6 +3,13 @@ Change Log
 
 All notable changes to this project will be documented in this file.
 
+[1.8.7] - 2026-04-08
+--------------------
+
+* a4264a9 - The closing slash in the Location header's value is not mandatory
+* 008d9ab - Added read timeout (default 30.0s)
+* b80a244 - UrlFetcherViaCommand fixed
+
 [1.8.6] - 2025-09-15
 --------------------
 
