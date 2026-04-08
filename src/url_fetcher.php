@@ -26,8 +26,8 @@ defined("URL_FETCHER_VERIFY_PEER") || define("URL_FETCHER_VERIFY_PEER",true);
  * ## Make a GET request
  * ```
  * $fetcher = new UrlFetcher("http://username:password@www.root.cz/");
- * if($f->found()){
- * 	echo $f->getContent();
+ * if($fetcher->found()){
+ * 	echo $fetcher->getContent();
  * }
  * ```
  *
@@ -112,7 +112,7 @@ class UrlFetcher {
 	/**
 	 * Connection timeout in seconds
 	 *
-	 * @var integer
+	 * @var float
 	 */
 	protected $_SocketTimeout = 5.0;
 
@@ -214,7 +214,7 @@ class UrlFetcher {
 	 * @param array $options
 	 * - **additional_headers** -
 	 * - **max_redirections** [default: 5]
-	 * - **user_agent** - content of User-Agent http header [default: 'UrlFetcher 1.0']
+	 * - **user_agent** - content of User-Agent http header [default: "UrlFetcher/".self::VERSION]
 	 */
 	function __construct($url = "", $options = array()){
 		$this->_reset();
@@ -395,7 +395,7 @@ class UrlFetcher {
 			$this->_RequestMethod = $options["request_method"];
 		}
 
-		$content = $options["content"]	;
+		$content = $options["content"];
 		if(!is_a($content,"StringBuffer")){
 			$content = new StringBuffer($content);
 		}
@@ -438,7 +438,7 @@ class UrlFetcher {
 		// !! redirection
 		if(in_array($this->getStatusCode(),array(301,302,303)) && ($location = $this->getHeaderValue("Location"))){
 			$this->_CountOfRedirection++;
-			if($this->_CountOfRedirection>=$this->_MaxRedirections){
+			if($this->_CountOfRedirection>$this->_MaxRedirections){
 				return $this->_setError("maximum redirections reached: $this->_CountOfRedirection");
 			}
 			if(preg_match('/^\//',$location)){
@@ -593,7 +593,7 @@ class UrlFetcher {
 	function getHeaderValue($header){
 		$header = strtolower($header);
 		$headers = $this->getResponseHeaders(array("as_hash" => true, "lowerize_keys" => true));
-		if(isset($headers["$header"])){ return $headers["$header"]; }
+		if(isset($headers[$header])){ return $headers[$header]; }
 	}
 
 	/**
@@ -883,7 +883,7 @@ class UrlFetcher {
 				return $this->_setError("failed to open socket: $errstr ($err_ar[message])");
 			}
 			if(!is_null($http_response_header)){
-				$response_headers = join("\n\r",$http_response_header);
+				$response_headers = join("\r\n",$http_response_header);
 			}
 
 		}
@@ -897,7 +897,7 @@ class UrlFetcher {
 			}
 		}
 
-		while(!feof($f) && $f){
+		while($f && !feof($f)){
 			$_b = fread($f,self::SOCKET_CHUNK_SIZE); // 256kB
 
 			$info = stream_get_meta_data($f);
