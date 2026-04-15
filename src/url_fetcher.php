@@ -122,7 +122,7 @@ class UrlFetcher {
 	 * @var float
 	 *
 	 */
-	protected $_ReadTimeout = 30.0;
+	protected $_ReadTimeout = 60.0;
 
 	/**
 	 * Redirections counter
