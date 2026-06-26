@@ -756,7 +756,7 @@ class UrlFetcher {
 		// detect TCP port number, defaults to 80 or 443 for SSL
 		if(preg_match("/^(.+):([0-9]{1,})$/",$_server,$matches)){
 			$_server = $matches[1];
-			$this->_Port = (integer)$matches[2];
+			$this->_Port = (int)$matches[2];
 		}else{
 			$this->_Port = $this->_Ssl ? 443 : 80;
 		}
