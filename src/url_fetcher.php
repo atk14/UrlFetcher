@@ -55,7 +55,7 @@ defined("URL_FETCHER_VERIFY_PEER") || define("URL_FETCHER_VERIFY_PEER",true);
  */
 class UrlFetcher {
 
-	const VERSION = "1.8.10";
+	const VERSION = "1.8.11";
 
 	const READ_POLL_INTERVAL_US = 20000;   // 20ms between read attempts
 	const WRITE_RETRY_INTERVAL_US = 10000; // 10ms between write attempts
