@@ -187,6 +187,15 @@ class UrlFetcher {
 	protected $_ForceContentLength = null;
 
 	/**
+	 * HTTP protocol version used in the request line
+	 *
+	 * "1.0" or "1.1"
+	 *
+	 * @var string
+	 */
+	protected $_HttpVersion = "1.0";
+
+	/**
 	 * @ignore
 	 */
 	function _reset(){
@@ -225,6 +234,7 @@ class UrlFetcher {
 	 * - **max_redirections** [default: 5]
 	 * - **user_agent** - content of User-Agent http header [default: "UrlFetcher/".self::VERSION]
 	 * - **ip_address** - IP address to connect to instead of resolving it from the URL's hostname; Host header and SSL certificate verification still use the original hostname [default: ""]
+	 * - **http_version** - HTTP protocol version used in the request line, "1.0" or "1.1" [default: "1.0"]
 	 */
 	function __construct($url = "", $options = array()){
 		$this->_reset();
@@ -244,6 +254,7 @@ class UrlFetcher {
 			"ip_address" => "", // e.g. "192.0.2.1"
 			"socket_timeout" => $this->_SocketTimeout,
 			"read_timeout" => $this->_ReadTimeout,
+			"http_version" => $this->_HttpVersion, // "1.0" or "1.1"
 		);
 
 		if(strlen($url)>0){
@@ -259,6 +270,7 @@ class UrlFetcher {
 		$this->_IpAddress = (string)$options["ip_address"];
 		$this->_SocketTimeout = (float)$options["socket_timeout"];
 		$this->_ReadTimeout = (float)$options["read_timeout"];
+		$this->_HttpVersion = (string)$options["http_version"];
 	}
 	
 	/**
@@ -808,7 +820,7 @@ class UrlFetcher {
 	 */
 	protected function _buildRequestHeaders(){
 		$out = array();
-		$out[] = "$this->_RequestMethod $this->_Uri HTTP/1.0";
+		$out[] = "$this->_RequestMethod $this->_Uri HTTP/$this->_HttpVersion";
 		$_server = $this->_Server;
 		if((!$this->_Ssl && $this->_Port!=80) || ($this->_Ssl && $this->_Port!=443)){ $_server .= ":$this->_Port"; }
 		$out[] = "Host: $_server";
