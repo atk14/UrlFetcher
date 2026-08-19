@@ -78,12 +78,16 @@ class TcUrlFetcher extends TcBase{
 		$this->assertTrue($f->found());
 		$headers = $f->getRequestHeaders();
 		$this->assertStringContains("GET /unit-testing/dungeon-master.png HTTP/1.0",$headers);
+		$this->assertEquals(11462,strlen($f->getContent()));
+		$this->assertEquals("c4f99bdb6a4feb3b41b1bcd56a4d7aa3",md5($f->getContent()));
 
 		// HTTP/1.1
 		$f = new UrlFetcher("https://jarek.plovarna.cz/unit-testing/dungeon-master.png",array("http_version" => "1.1"));
 		$this->assertTrue($f->found());
 		$headers = $f->getRequestHeaders();
 		$this->assertStringContains("GET /unit-testing/dungeon-master.png HTTP/1.1",$headers);
+		$this->assertEquals(11462,strlen($f->getContent()));
+		$this->assertEquals("c4f99bdb6a4feb3b41b1bcd56a4d7aa3",md5($f->getContent()));
 	}
 
 	function test_authorization(){
