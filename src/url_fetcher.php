@@ -985,6 +985,10 @@ class UrlFetcher {
 		}
 		fclose($f);
 
+		if($is_chunked && !$chunk_state["done"] && !$this->errorOccurred()){
+			$this->_setError("invalid or truncated chunked transfer encoding");
+		}
+
 		if($this->errorOccurred()){
 			return false;
 		}
