@@ -492,7 +492,7 @@ class UrlFetcher {
 		}
 
 		if(!preg_match('/^2/',$this->getStatusCode())){
-			return $this->_setError("status code is ".$this->getStatusCode());
+			return $this->_setError("status code is ".$this->getStatusCode()." ".$this->getStatusMessage());
 		}
 
 		return true;
